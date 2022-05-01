@@ -1,0 +1,12 @@
+# setup
+build
+*/slf4py.egg-info
+dist
+
+# Python
+__pycache__
+*.pyc
+
+# PyCharm
+.idea
+venv
