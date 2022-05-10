@@ -2,6 +2,12 @@
 Simple Logging Facade for Python.
 
 ## How to use
+```bash
+# at Terminal
+
+$ pip install slf4py
+```
+
 ```python
 # at example.py
 
