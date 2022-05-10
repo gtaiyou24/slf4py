@@ -11,6 +11,7 @@ setup(
     author_email='gtaiyou24@gmail.com',
     description='Simple Logging Facade for Python',
     long_description=readme,
+    long_description_content_type='text/markdown',
     packages=find_packages(where="src"),
     package_dir={"": "src"}
 )
