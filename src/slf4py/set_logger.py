@@ -1,20 +1,32 @@
 import os
 from logging import getLogger, StreamHandler, Formatter, getLevelName
-
-__LOG_FORMAT = os.getenv("LOG_FORMAT", "[%(levelname)s] [%(asctime)s] [%(filename)s:%(lineno)d] %(message)s")
-__LOG_LEVEL = os.getenv("LOG_LEVEL", "DEBUG")
-
-LEVEL_NAME = getLevelName(__LOG_LEVEL)
-
-HANDLER = StreamHandler()
-HANDLER.setLevel(LEVEL_NAME)
-HANDLER.setFormatter(Formatter(__LOG_FORMAT))
+from typing import Literal
 
 
-def set_logger(cls: type):
-    log = getLogger(cls.__name__)
-    log.setLevel(LEVEL_NAME)
-    log.addHandler(HANDLER)
-    log.propagate = False
-    cls.log = log
-    return cls
+def set_logger[T](
+    cls: T | None = None,
+    format: str = os.getenv("SLF4PY_LOG_FORMAT", "[%(levelname)s] [%(asctime)s] [%(filename)s:%(lineno)d] %(message)s"),
+    level: Literal['CRITICAL', 'ERROR', 'WARNING', 'INFO', 'DEBUG', 'NOTSET'] = os.getenv("SLF4PY_LOG_LEVEL", "DEBUG")
+):
+    def _set_logger(cls: T):
+        def wrapper(*args, **kwargs):
+            log = getLogger(cls.__name__)
+
+            level_name = getLevelName(level)
+            handler = StreamHandler()
+            handler.setLevel(level_name)
+            handler.setFormatter(Formatter(format))
+
+            log.setLevel(level_name)
+            log.addHandler(handler)
+            log.propagate = False
+
+            setattr(cls, "log", log)
+
+            return cls(*args, **kwargs)
+        return wrapper
+
+    if cls is None:
+        return _set_logger
+
+    return _set_logger(cls)

@@ -6,7 +6,7 @@ with open('README.md', encoding='utf-8') as f:
 
 setup(
     name='slf4py',
-    version='0.0.2',
+    version='0.0.3',
     author='taiyo tamura',
     author_email='gtaiyou24@gmail.com',
     description='Simple Logging Facade for Python',
